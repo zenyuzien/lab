@@ -1,0 +1,104 @@
+import java.net.*;
+import java.io.*;
+
+class fs {
+    static DataInputStream DIS = null;
+
+    public static void main(String[] args) {
+        ServerSocket s = null;
+        Socket c = null;
+
+        try {
+            s = new ServerSocket(9999);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        try {
+            c = s.accept();
+            DIS = new DataInputStream(c.getInputStream());
+            receivefile("3_new.txt");
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private static void receivefile(String filename) throws Exception {
+
+        int size;
+        long fsize = DIS.readLong();
+        FileOutputStream FOS = new FileOutputStream(filename);
+        byte[] buffer = new byte[4 * 1024];
+        while (fsize > 0 && (size = DIS.read(buffer, 0, (int) Math.min(buffer.length, fsize))) != -1) {
+            FOS.write(buffer, 0, size);
+            fsize = fsize - size;
+        }
+        FOS.close();
+    }
+}
+
+
+import java.net.*;
+import java.io.*;
+
+class fc {
+    static DataOutputStream DOS = null;
+
+    public static void main(String[] args) {
+        Socket c = null;
+        try {
+            c = new Socket("127.0.0.1", 9999);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        try {
+            DOS = new DataOutputStream(c.getOutputStream());
+            sendfile("/home/sathish/SNU/Sem4/cnlab/code/z3_source.txt");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private static void sendfile(String path) throws Exception {
+        int size;
+        File file = new File(path);
+        FileInputStream FIS = new FileInputStream(file);
+        DOS.writeLong(file.length());
+        byte[] buffer = new byte[4 * 1024];
+        while ((size = FIS.read(buffer)) != -1) {
+            DOS.write(buffer, 0, size);
+            DOS.flush();
+        }
+        FIS.close();
+    }
+}
+
+
+**
+1)difference between tcp and udp
+2)seven layers of osi model
+3)difference between switch and router
+4)difference between nodes and links
+5)difference between circuit switching and packet switching
+6)examples of application layer protocols
+7)connection less and connection oriented
+8)Topoloy and different types of topology
+9)link state routing and distance vector routing differences
+10)difference between congestion control and flow control
+11) in which layer is checksum algorithm used
+12) why is checksum and crc used
+13) which between tcp and udp is reliable and why
+diff b/w tcp/udp: tcp- connection, udp-connectionless, udp is nt reliable
+physical datalink network transport session presentation application
+switch connects multiple devices within a network while router connects multiple networks.
+A Node is the meeting point of two or more routes. A Link is a road that joins two nodes
+cs ps : path established full/intermediete
+Hypertext Transfer Protocol (HTTP), File Transfer Protocol (FTP), Post Office Protocol (POP), Simple Mail Transfer Protocol (SMTP), and Domain Name System (DNS).
+end-end connection establishment before yranferring data
+phy str - star ring bus mesh tree hybrid
+Flow Control and Congestion Control are traffic controlling methods for different situations. The main difference between flow control and congestion control is that, In flow control, rate of traffic received from a sender can be controlled by a receiver. On the other hand, In congestion control, rate of traffic from sender to the network is controlled.
+Routing is the process of transferring data from a source to a destination over the internet. The two types of routing algorithms are distance vector routing and link state routing, which are classified based on how the routing tables are updated.
+
+The first distinction between distance vector and link state routing is that in distance vector routing, routers share the knowledge of the entire autonomous system, whereas in link state routing, routers only share the knowledge of their immediate neighbours.
